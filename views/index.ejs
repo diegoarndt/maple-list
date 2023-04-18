@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mapple List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-8GsZEKgDQMXurzLd9XKjQxW+nZSySG/bRgRnysBJvSE8TsbWq3aTbzlkrT+g9XGm8tG0rZvwRW26t1kwL+mb0w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/2c36e9b7b1.js"></script>
+</head>
+
+<style>
+    html {
+        position: relative;
+        min-height: 100%;
+    }
+
+    body {
+        background-color: #e6e3e3;
+    }
+
+    header {
+        padding-top: 3.6rem;
+    }
+
+    a,
+    a:hover {
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+    .special-link {
+        color: #0b66c2 !important;
+        padding: 0.25rem;
+        margin-left: -0.25rem;
+        transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        text-decoration: none !important;
+    }
+
+    .special-link:hover {
+        box-shadow: inset 25rem 0 0 0 #0b66c2;
+        color: #ffffff !important;
+    }
+
+    .form-control {
+        border-radius: 30px;
+        padding: 10px 20px;
+        font-size: 18px;
+        border: none;
+        background-color: #f2f2f2;
+    }
+
+    .form-group label {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .shopping-list {
+        margin: 5rem 0 7rem 0;
+    }
+
+    .btn-primary {
+        border-radius: 30px;
+        padding: 10px 20px;
+        font-size: 18px;
+        border: none;
+        background-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0062cc;
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 60px;
+        color: #fff;
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger fixed-top">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+
+            <a class="navbar-brand" href="#">
+                <i class="fab fa-canadian-maple-leaf"></i>
+                Mapple List
+            </a>
+            <div class="navbar-nav">
+                <a class="nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/about">About</a>
+                <a class="nav-link" href="/contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <div class="jumbotron p-4 text-center">
+            <h1>Assignment #4 - Shopping list</h1>
+            <p>Web Application Programming - WDDM-120-0NA</p>
+        </div>
+    </header>
+
+    <main class="container my-5">
+        <div class="row justify-content-center my-5">
+            <div class="col-md-8 bg-white p-4">
+                <div class="bg-white p-4 rounded-lg shadow-lg">
+                    <div class="form-group">
+                        <label for="item-name" class="text-primary font-weight-bold">Name</label>
+                        <input type="text" class="form-control" id="item-name" name="name"
+                            placeholder="Add item name..." autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="item-quantity" class="text-primary font-weight-bold">Quantity</label>
+                        <input type="number" class="form-control" id="item-quantity" name="quantity"
+                            placeholder="Add quantity...">
+                    </div>
+                    <button type="submit" class="btn btn-primary add-btn mt-3 float-right"><i
+                            class="fas fa-plus pr-2"></i>Add item</button>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row justify-content-center shopping-list">
+            <div class="col-md-8">
+                <ul class="list-group" id="item-list">
+                    <% if (typeof content !=='undefined' ) { %>
+                        <% content.forEach(item=> { %>
+                            <li
+                                class="list-group-item d-flex justify-content-between align-items-center bg-white p-3 rounded-lg shadow-lg mb-3">
+                                <div>
+                                    <h4 class="text-primary font-weight-bold">
+                                        <%= item.name %>
+                                    </h4>
+                                    <p class="mb-0"><strong>Quantity: </strong>
+                                        <%= item.quantity %>
+                                    </p>
+                                </div>
+                                <div>
+                                    <button class="btn btn-secondary mr-2 edit-btn" data-id="<%= item.id %>"><i
+                                            class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger delete-btn" data-id="<%= item.id %>"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                            </li>
+                            <% }) %>
+                                <% } else { %>
+                                    <div class="alert alert-info text-center p-4 rounded-lg shadow-lg">
+                                        <p class="mb-0">No items in your list yet!</p>
+                                    </div>
+                                    <% } %>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer bg-danger d-flex justify-content-center align-items-center">
+        <span>© 2023 - <a href="https://www.linkedin.com/in/diegoarndt/">Diego Arndt</a></span>
+    </footer>
+
+    <script>
+
+        $(document).ready(() => {
+            // Attach click event listener to item list
+            $('#item-list').on('click', '.edit-btn', (event) => {
+                const itemId = event.currentTarget.getAttribute('data-id');
+
+                $.ajax({
+                    url: `/items/${itemId}`,
+                    method: 'GET',
+                    success: (item) => {
+                        // Update the item list
+                        updateItemList();
+                    },
+                    error: (error) => {
+                        console.error(`Failed to retrieve item. Please try again later. ${error}`);
+                    },
+                });
+            });
+
+            $('#item-list').on('click', '.delete-btn', (event) => {
+                const itemId = event.currentTarget.getAttribute('data-id');
+
+                console.log(itemId);
+
+                $.ajax({
+                    url: `/item/${itemId}`,
+                    method: 'DELETE',
+                    success: () => {
+                        // Remove the deleted item from the DOM
+                        const itemDiv = event.currentTarget.closest('.item');
+                        if (itemDiv) {
+                            itemDiv.remove();
+                        }
+
+                        // Update the item list
+                        updateItemList();
+                    },
+                    error: (error) => {
+                        console.error(`Failed to delete item. Please try again later. ${error}`);
+                    },
+                });
+            });
+
+
+            $('.add-btn').on('click', () => {
+                const nameInput = $('#item-name');
+                const quantityInput = $('#item-quantity');
+
+                const newItem = {
+                    name: nameInput.val(),
+                    quantity: quantityInput.val(),
+                };
+
+                $.ajax({
+                    url: '/item',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(newItem),
+                    success: (item) => {
+                        // Update the item list
+                        updateItemList();
+                        nameInput.val('');
+                        quantityInput.val('');
+                    },
+                    error: (error) => {
+                        console.error(`Failed to add item. Please try again later. ${error}`);
+                    },
+                });
+            });
+        });
+
+        const nameInput = $('#item-name');
+        const quantityInput = $('#item-quantity');
+        const addButton = $('.add-btn');
+
+        toggleButton();
+
+        nameInput.on('input', toggleButton);
+        quantityInput.on('input', toggleButton);
+
+        function toggleButton() {
+            if (nameInput.val() && quantityInput.val()) {
+                addButton.prop('disabled', false);
+            } else {
+                addButton.prop('disabled', true);
+            }
+        }
+
+        function updateItemList() {
+            fetch('/items')
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Failed to retrieve items');
+                    }
+                    return response.json();
+                })
+                .then((items) => {
+                    const itemList = document.querySelector('#item-list');
+                    let itemListHTML = '';
+                    items.forEach((item) => {
+                        itemListHTML += `
+                            <li class="list-group-item d-flex justify-content-between align-items-center bg-white p-3 rounded-lg shadow-lg mb-3">
+                                <div>
+                                <h4 class="text-primary font-weight-bold">
+                                    ${item.name}
+                                </h4>
+                                <p class="mb-0"><strong>Quantity: </strong>
+                                    ${item.quantity}
+                                </p>
+                                </div>
+                                <div>
+                                <button class="btn btn-secondary mr-2 edit-btn" data-id="${item.id}"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger delete-btn" data-id="${item.id}"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </li>
+                        `;
+                    });
+                    itemList.innerHTML = itemListHTML;
+                    toggleButton();
+
+                })
+                .catch((error) => {
+                    console.error(
+                        `Failed to retrieve items. Please try again later. ${error}`
+                    );
+                });
+        }
+    </script>
+
+</body>
+
+</html>
