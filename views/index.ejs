@@ -47,7 +47,7 @@
     }
 
     .form-control {
-        border-radius: 30px;
+        border-radius: 10px;
         padding: 10px 20px;
         font-size: 18px;
         border: none;
@@ -65,8 +65,8 @@
     }
 
     .btn-primary {
-        border-radius: 30px;
-        padding: 10px 20px;
+        border-radius: 10px;
+        padding: 5px 10px;
         font-size: 18px;
         border: none;
         background-color: #007bff;
@@ -109,57 +109,62 @@
     </header>
 
     <main class="container my-5">
-        <div class="row justify-content-center my-5">
-            <div class="col-md-8 bg-white p-4">
-                <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <div class="form-group">
-                        <label for="item-name" class="text-primary font-weight-bold">Name</label>
-                        <input type="text" class="form-control" id="item-name" name="name"
-                            placeholder="Add item name..." autocomplete="off">
+        <% if (typeof content !== 'undefined' && typeof content !=='object' ) { %>
+            <%- content %>
+        <% } %>
+        <% if (typeof content === 'object' ) { %>
+            <div class="row justify-content-center my-5">
+                <div class="col-md-8 bg-white p-4">
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="form-group">
+                            <label for="item-name" class="text-primary font-weight-bold">Name</label>
+                            <input type="text" class="form-control" id="item-name" name="name"
+                                placeholder="Add item name..." autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="item-quantity"
+                                class="text-primary font-weight-bold">Quantity</label>
+                            <input type="number" class="form-control" id="item-quantity" name="quantity"
+                                placeholder="Add quantity...">
+                        </div>
+                        <button type="submit" class="btn btn-primary add-btn mt-2 float-right"><i
+                                class="fas fa-plus pr-2"></i>Add item</button>
                     </div>
-                    <div class="form-group">
-                        <label for="item-quantity" class="text-primary font-weight-bold">Quantity</label>
-                        <input type="number" class="form-control" id="item-quantity" name="quantity"
-                            placeholder="Add quantity...">
-                    </div>
-                    <button type="submit" class="btn btn-primary add-btn mt-3 float-right"><i
-                            class="fas fa-plus pr-2"></i>Add item</button>
                 </div>
             </div>
-        </div>
-        <hr>
-        <div class="row justify-content-center shopping-list">
-            <div class="col-md-8">
-                <ul class="list-group" id="item-list">
-                    <% if (typeof content !=='undefined' ) { %>
-                        <% content.forEach(item=> { %>
-                            <li
-                                class="list-group-item d-flex justify-content-between align-items-center bg-white p-3 rounded-lg shadow-lg mb-3">
-                                <div>
-                                    <h4 class="text-primary font-weight-bold">
-                                        <%= item.name %>
-                                    </h4>
-                                    <p class="mb-0"><strong>Quantity: </strong>
-                                        <%= item.quantity %>
-                                    </p>
-                                </div>
-                                <div>
-                                    <button class="btn btn-secondary mr-2 edit-btn" data-id="<%= item.id %>"><i
-                                            class="fas fa-edit"></i></button>
-                                    <button class="btn btn-danger delete-btn" data-id="<%= item.id %>"><i
-                                            class="fas fa-trash"></i></button>
-                                </div>
-                            </li>
-                            <% }) %>
-                                <% } else { %>
-                                    <div class="alert alert-info text-center p-4 rounded-lg shadow-lg">
-                                        <p class="mb-0">No items in your list yet!</p>
+            <hr>
+            <div class="row justify-content-center shopping-list">
+                <div class="col-md-8">
+                    <ul class="list-group" id="item-list">
+                        <% if (typeof content !=='undefined' ) { %>
+                            <% content.forEach(item=> { %>
+                                <li
+                                    class="list-group-item d-flex justify-content-between align-items-center bg-white p-4 rounded-lg shadow-lg mb-3">
+                                    <div>
+                                        <h4 class="text-primary font-weight-bold">
+                                            <%= item.name %>
+                                        </h4>
+                                        <p class="mb-0"><strong>Quantity: </strong>
+                                            <%= item.quantity %>
+                                        </p>
                                     </div>
-                                    <% } %>
-                </ul>
+                                    <div>
+                                        <button class="btn btn-secondary mr-2 edit-btn"
+                                            data-id="<%= item.id %>"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-danger delete-btn"
+                                            data-id="<%= item.id %>"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </li>
+                                <% }) %>
+                                    <% } else { %>
+                                        <div class="alert alert-info text-center p-4 rounded-lg shadow-lg">
+                                            <p class="mb-0">No items in your list yet!</p>
+                                        </div>
+                                        <% } %>
+                    </ul>
+                </div>
             </div>
-        </div>
-
+        <% } %>
     </main>
 
     <footer class="footer bg-danger d-flex justify-content-center align-items-center">

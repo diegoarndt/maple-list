@@ -54,7 +54,6 @@ app.get('/contact', (_, res) => {
         <button type="button" class="btn btn-dark">Send</button>
         <p class="mt-4"><small>P.S.: This is just a sample form.</small></p>
     </form>
-
     `;
   res.render('index', { content });
 });
