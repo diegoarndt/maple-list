@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <title>Mapple List</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        integrity="sha512-8GsZEKgDQMXurzLd9XKjQxW+nZSySG/bRgRnysBJvSE8TsbWq3aTbzlkrT+g9XGm8tG0rZvwRW26t1kwL+mb0w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://kit.fontawesome.com/2c36e9b7b1.js"></script>
@@ -109,62 +107,77 @@
     </header>
 
     <main class="container my-5">
-        <% if (typeof content !== 'undefined' && typeof content !=='object' ) { %>
+        <% if (typeof content !=='undefined' && typeof content !=='object' ) { %>
             <%- content %>
-        <% } %>
-        <% if (typeof content === 'object' ) { %>
-            <div class="row justify-content-center my-5">
-                <div class="col-md-8 bg-white p-4">
-                    <div class="bg-white rounded-lg shadow-lg">
-                        <div class="form-group">
-                            <label for="item-name" class="text-primary font-weight-bold">Name</label>
-                            <input type="text" class="form-control" id="item-name" name="name"
-                                placeholder="Add item name..." autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label for="item-quantity"
-                                class="text-primary font-weight-bold">Quantity</label>
-                            <input type="number" class="form-control" id="item-quantity" name="quantity"
-                                placeholder="Add quantity...">
-                        </div>
-                        <button type="submit" class="btn btn-primary add-btn mt-2 float-right"><i
-                                class="fas fa-plus pr-2"></i>Add item</button>
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <div class="row justify-content-center shopping-list">
-                <div class="col-md-8">
-                    <ul class="list-group" id="item-list">
-                        <% if (typeof content !=='undefined' ) { %>
-                            <% content.forEach(item=> { %>
-                                <li
-                                    class="list-group-item d-flex justify-content-between align-items-center bg-white p-4 rounded-lg shadow-lg mb-3">
-                                    <div>
-                                        <h4 class="text-primary font-weight-bold">
-                                            <%= item.name %>
-                                        </h4>
-                                        <p class="mb-0"><strong>Quantity: </strong>
-                                            <%= item.quantity %>
-                                        </p>
+                <% } %>
+                    <% if (typeof content==='object' ) { %>
+                        <div class="row justify-content-center my-5">
+                            <div class="col-md-8 bg-white p-4">
+                                <div class="bg-white rounded-lg shadow-lg">
+                                    <div class="form-group">
+                                        <label for="item-name" class="text-primary font-weight-bold">Name</label>
+                                        <input type="text" class="form-control" id="item-name" name="name"
+                                            placeholder="Add item name..." autocomplete="off">
                                     </div>
-                                    <div>
-                                        <button class="btn btn-secondary mr-2 edit-btn"
-                                            data-id="<%= item.id %>"><i class="fas fa-edit"></i></button>
-                                        <button class="btn btn-danger delete-btn"
-                                            data-id="<%= item.id %>"><i class="fas fa-trash"></i></button>
+                                    <div class="form-group">
+                                        <label for="item-quantity"
+                                            class="text-primary font-weight-bold">Quantity</label>
+                                        <input type="number" class="form-control" id="item-quantity" name="quantity"
+                                            placeholder="Add quantity...">
                                     </div>
-                                </li>
-                                <% }) %>
-                                    <% } else { %>
-                                        <div class="alert alert-info text-center p-4 rounded-lg shadow-lg">
-                                            <p class="mb-0">No items in your list yet!</p>
+                                    <div class="form-group">
+                                        <label for="item-image" class="text-primary font-weight-bold">Image</label>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="item-image" name="image">
+                                            <label class="custom-file-label" for="item-image">Choose file</label>
                                         </div>
-                                        <% } %>
-                    </ul>
-                </div>
-            </div>
-        <% } %>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary add-btn mt-2 float-right"><i
+                                            class="fas fa-plus pr-2"></i>Add item</button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row justify-content-center shopping-list">
+                            <div class="col-md-8">
+                                <ul class="list-group" id="item-list">
+                                    <% if (typeof content !=='undefined' ) { %>
+                                        <% content.forEach(item=> { %>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center bg-white p-4 rounded-lg shadow-lg mb-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="mr-4" style="width: 64px; height: 64px;">
+                                                        <img src="/images/<%= item.image %>" style="object-fit: contain; width: 100%; height: 100%;" alt="Item Image">
+                                                    </div>                                                    
+                                                    <div>
+                                                        <h4 class="text-primary font-weight-bold">
+                                                            <%= item.name %>
+                                                        </h4>
+                                                        <p class="mb-0"><strong>Quantity: </strong>
+                                                            <%= item.quantity %>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <button class="btn btn-success mr-2 basket-btn"
+                                                        data-id="<%= item.id %>"><i
+                                                            class="fas fa-shopping-basket"></i></button>
+                                                    <button class="btn btn-secondary mr-2 edit-btn"
+                                                        data-id="<%= item.id %>"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-danger delete-btn"
+                                                        data-id="<%= item.id %>"><i class="fas fa-trash"></i></button>
+                                                </div>
+                                            </li>
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <div class="alert alert-info text-center p-4 rounded-lg shadow-lg">
+                                                        <p class="mb-0">No items in your list yet!</p>
+                                                    </div>
+                                                    <% } %>
+                                </ul>
+                            </div>
+                        </div>
+                        <% } %>
     </main>
 
     <footer class="footer bg-danger d-flex justify-content-center align-items-center">
@@ -219,17 +232,19 @@
             $('.add-btn').on('click', () => {
                 const nameInput = $('#item-name');
                 const quantityInput = $('#item-quantity');
+                const imageInput = $('#item-image')[0].files[0]; // get the uploaded file
 
-                const newItem = {
-                    name: nameInput.val(),
-                    quantity: quantityInput.val(),
-                };
+                const newItem = new FormData();
+                newItem.append('name', nameInput.val());
+                newItem.append('quantity', quantityInput.val());
+                newItem.append('image', imageInput); // append the file to the FormData object
 
                 $.ajax({
                     url: '/item',
                     method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(newItem),
+                    processData: false, // prevent jQuery from automatically processing the FormData object
+                    contentType: false, // let the browser set the Content-Type header for the request
+                    data: newItem,
                     success: (item) => {
                         // Update the item list
                         updateItemList();
@@ -237,7 +252,8 @@
                         quantityInput.val('');
                     },
                     error: (error) => {
-                        console.error(`Failed to add item. Please try again later. ${error}`);
+                        console.log(error);
+                        console.error(`Failed to add item. Please try again later.`);
                     },
                 });
             });
@@ -274,17 +290,23 @@
                     items.forEach((item) => {
                         itemListHTML += `
                             <li class="list-group-item d-flex justify-content-between align-items-center bg-white p-3 rounded-lg shadow-lg mb-3">
-                                <div>
-                                <h4 class="text-primary font-weight-bold">
-                                    ${item.name}
-                                </h4>
-                                <p class="mb-0"><strong>Quantity: </strong>
-                                    ${item.quantity}
-                                </p>
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-4" style="width: 64px; height: 64px;">
+                                        <img src="/images/${item.image}" style="object-fit: contain; width: 100%; height: 100%;" alt="Item Image">
+                                    </div>
+                                    <div>
+                                        <h4 class="text-primary font-weight-bold">
+                                            ${item.name}
+                                        </h4>
+                                        <p class="mb-0"><strong>Quantity: </strong>
+                                            ${item.quantity}
+                                        </p>
+                                    </div>
                                 </div>
                                 <div>
-                                <button class="btn btn-secondary mr-2 edit-btn" data-id="${item.id}"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-danger delete-btn" data-id="${item.id}"><i class="fas fa-trash"></i></button>
+                                    <button class="btn btn-success mr-2 basket-btn"data-id="${item.id}"><i class="fas fa-shopping-basket"></i></button>
+                                    <button class="btn btn-secondary mr-2 edit-btn" data-id="${item.id}"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger delete-btn" data-id="${item.id}"><i class="fas fa-trash"></i></button>
                                 </div>
                             </li>
                         `;

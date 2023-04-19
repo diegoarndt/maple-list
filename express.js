@@ -3,7 +3,27 @@ const app = express();
 const path = require('path');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const fs = require('fs');
 
+// Create the public/images directory if it doesn't exist
+const uploadDir = 'public/images';
+if (!fs.existsSync(uploadDir)){
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, uploadDir); // set destination folder for uploaded images
+  },
+  filename: (req, file, callback) => {
+    callback(null, Date.now() + '-' + file.originalname); // set unique filename for uploaded image
+  }
+});
+
+const upload = multer({ storage });
+
+app.use(express.static('public')); // set static folder for public files
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
@@ -81,13 +101,21 @@ app.get('/items/:id', (req, res) => {
 });
 
 // Route to add a new item
-app.post('/item', (req, res) => {
-  const query = `INSERT INTO items (name, quantity) VALUES ('${req.body.name}', ${req.body.quantity})`;
-  connection.query(query, (err, results) => {
+app.post('/item', upload.single('image'), (req, res) => {
+  const query = `INSERT INTO items (name, quantity, image) VALUES (?, ?, ?)`;
+  const values = [req.body.name, req.body.quantity, req.file.filename];
+  connection.query(query, values, (err, results) => {
     if (err) throw err;
     res.status(204).send();
   });
 });
+// app.post('/item', (req, res) => {
+//   const query = `INSERT INTO items (name, quantity) VALUES ('${req.body.name}', ${req.body.quantity})`;
+//   connection.query(query, (err, results) => {
+//     if (err) throw err;
+//     res.status(204).send();
+//   });
+// });
 
 // Route to update an existing item
 app.put('/item/:id', (req, res) => {
