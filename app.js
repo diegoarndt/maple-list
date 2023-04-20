@@ -8,17 +8,18 @@ const fs = require('fs');
 
 // Create the public/images directory if it doesn't exist
 const uploadDir = 'public/images';
-if (!fs.existsSync(uploadDir)){
-    fs.mkdirSync(uploadDir, { recursive: true });
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+// Set up multer to store uploaded images
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, uploadDir); // set destination folder for uploaded images
   },
   filename: (req, file, callback) => {
     callback(null, Date.now() + '-' + file.originalname); // set unique filename for uploaded image
-  }
+  },
 });
 
 const upload = multer({ storage });
@@ -50,12 +51,14 @@ app.get('/', (_, res) => {
   });
 });
 
+// Define route for about page
 app.get('/about', (_, res) => {
   const content = `<h3>About this project</h3>
     <p><em>This project is a simple website that uses <mark>NodeJS, Express, EJS, Bootstrap and MySQL</mark> to create a simple website.</em></p>`;
   res.render('index', { content });
 });
 
+// Define route for contact page
 app.get('/contact', (_, res) => {
   const content = `<h3>Contact me</h3>
     <kbd><kbd>Diego Arndt</kbd></kbd>
@@ -109,19 +112,40 @@ app.post('/item', upload.single('image'), (req, res) => {
     res.status(204).send();
   });
 });
-// app.post('/item', (req, res) => {
-//   const query = `INSERT INTO items (name, quantity) VALUES ('${req.body.name}', ${req.body.quantity})`;
-//   connection.query(query, (err, results) => {
-//     if (err) throw err;
-//     res.status(204).send();
-//   });
-// });
 
 // Route to update an existing item
-app.put('/item/:id', (req, res) => {
-  const query = `UPDATE items SET name = '${req.body.name}' WHERE id = ${req.params.id}`;
+app.put('/item/:id', upload.single('image'), (req, res) => {
+  let query;
+  const updatedFields = [];
+
+  if (req.body.isAddedToBasket !== undefined) {
+    updatedFields.push(`isAddedToBasket = ${req.body.isAddedToBasket}`);
+  }
+
+  if (req.body.name !== undefined) {
+    updatedFields.push(`name = '${req.body.name}'`);
+  }
+
+  if (req.body.quantity !== undefined) {
+    updatedFields.push(`quantity = '${req.body.quantity}'`);
+  }
+
+  if (req.file !== undefined) {
+    updatedFields.push(`image = '${req.file.filename}'`);
+  }
+
+  if (updatedFields.length === 0) {
+    return res.status(400).json({ error: 'Bad Request: No valid fields provided' });
+  }
+
+  query = `UPDATE items SET ${updatedFields.join(', ')} WHERE id = ${req.params.id}`;
+
   connection.query(query, (err, results) => {
-    if (err) throw err;
+    if (err) {
+      console.error(`Failed to update item with ID ${req.params.id}: ${err}`);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
     if (results.affectedRows === 0) {
       res.status(404).json({ message: 'Item not found' });
     } else {
@@ -145,7 +169,8 @@ app.delete('/item/:id', (req, res) => {
   });
 });
 
+// Start server
 const port = process.env.PORT || 3007;
 app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
+  console.log(`Server is up and running on port ${port} 🚀`);
 });

@@ -4,9 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Mapple List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://kit.fontawesome.com/2c36e9b7b1.js"></script>
 </head>
@@ -59,11 +63,10 @@
     }
 
     .shopping-list {
-        margin: 5rem 0 7rem 0;
+        margin: 3rem 0 7rem 0;
     }
 
     .btn-primary {
-        border-radius: 10px;
         padding: 5px 10px;
         font-size: 18px;
         border: none;
@@ -91,10 +94,17 @@
                 <i class="fab fa-canadian-maple-leaf"></i>
                 Mapple List
             </a>
-            <div class="navbar-nav">
-                <a class="nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
-                <a class="nav-link" href="/about">About</a>
-                <a class="nav-link" href="/contact">Contact</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/about">About</a>
+                    <a class="nav-link" href="/contact">Contact</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -111,9 +121,9 @@
             <%- content %>
                 <% } %>
                     <% if (typeof content==='object' ) { %>
-                        <div class="row justify-content-center my-5">
+                        <div class="row justify-content-center my-5 mx-2">
                             <div class="col-md-8 bg-white p-4">
-                                <div class="bg-white rounded-lg shadow-lg">
+                                <div class="bg-white rounded-lg">
                                     <div class="form-group">
                                         <label for="item-name" class="text-primary font-weight-bold">Name</label>
                                         <input type="text" class="form-control" id="item-name" name="name"
@@ -128,7 +138,8 @@
                                     <div class="form-group">
                                         <label for="item-image" class="text-primary font-weight-bold">Image</label>
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="item-image" name="image">
+                                            <input type="file" class="custom-file-input" id="item-image" name="image"
+                                                accept="image/*">
                                             <label class="custom-file-label" for="item-image">Choose file</label>
                                         </div>
                                     </div>
@@ -143,12 +154,14 @@
                                 <ul class="list-group" id="item-list">
                                     <% if (typeof content !=='undefined' ) { %>
                                         <% content.forEach(item=> { %>
-                                            <li
-                                                class="list-group-item d-flex justify-content-between align-items-center bg-white p-4 rounded-lg shadow-lg mb-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="mr-4" style="width: 64px; height: 64px;">
-                                                        <img src="/images/<%= item.image %>" style="object-fit: contain; width: 100%; height: 100%;" alt="Item Image">
-                                                    </div>                                                    
+                                            <li class="list-group-item d-flex justify-content-between align-items-center p-4 rounded-lg mb-3"
+                                                style="border-left: <%= item.isAddedToBasket ? '5px solid green' : 'none' %>">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="mr-3" style="width: 64px; height: 64px;">
+                                                        <img src="/images/<%= item.image %>"
+                                                            style="object-fit: contain; width: 100%; height: 100%;"
+                                                            alt="Item Image">
+                                                    </div>
                                                     <div>
                                                         <h4 class="text-primary font-weight-bold">
                                                             <%= item.name %>
@@ -159,26 +172,64 @@
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <button class="btn btn-success mr-2 basket-btn"
+                                                    <button class="btn btn-success mr-2 basket-btn btn-md"
+                                                        style="display: <%= item.isAddedToBasket ? 'none' : 'inline-block' %>"
                                                         data-id="<%= item.id %>"><i
                                                             class="fas fa-shopping-basket"></i></button>
-                                                    <button class="btn btn-secondary mr-2 edit-btn"
+                                                    <button class="btn btn-secondary mr-2 edit-btn btn-md"
                                                         data-id="<%= item.id %>"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-danger delete-btn"
+                                                    <button class="btn btn-danger delete-btn btn-md"
                                                         data-id="<%= item.id %>"><i class="fas fa-trash"></i></button>
                                                 </div>
                                             </li>
-                                            <% }) %>
-                                                <% } else { %>
-                                                    <div class="alert alert-info text-center p-4 rounded-lg shadow-lg">
-                                                        <p class="mb-0">No items in your list yet!</p>
-                                                    </div>
-                                                    <% } %>
+                                        <% }) %>
+                                    <% } else { %>
+                                        <div class="alert alert-info text-center p-4 rounded-lg">
+                                            <p class="mb-0">No items in your list yet!</p>
+                                        </div>
+                                    <% } %>
                                 </ul>
                             </div>
                         </div>
-                        <% } %>
+                    <% } %>
     </main>
+    <div class="modal fade" id="edit-item-modal" tabindex="-1" aria-labelledby="edit-item-modal-label"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="edit-item-modal-label">Edit Item</h5>
+                    <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-item-form">
+                        <div class="mb-3">
+                            <label for="edit-item-name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="edit-item-name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-item-quantity" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="edit-item-quantity" name="quantity" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="item-image" class="text-primary font-weight-bold">Image</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="edit-item-image" name="image"
+                                    accept="image/*">
+                                <label class="custom-file-label" for="edit-item-image">Choose
+                                    file</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="edit-item-submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer class="footer bg-danger d-flex justify-content-center align-items-center">
         <span>© 2023 - <a href="https://www.linkedin.com/in/diegoarndt/">Diego Arndt</a></span>
@@ -187,6 +238,11 @@
     <script>
 
         $(document).ready(() => {
+            $('#item-image, #edit-item-image').on('change', function (event) {
+                const fileName = event.target.files[0].name;
+                $(this).siblings('.custom-file-label').html(fileName);
+            });
+
             // Attach click event listener to item list
             $('#item-list').on('click', '.edit-btn', (event) => {
                 const itemId = event.currentTarget.getAttribute('data-id');
@@ -195,8 +251,15 @@
                     url: `/items/${itemId}`,
                     method: 'GET',
                     success: (item) => {
-                        // Update the item list
-                        updateItemList();
+                        // Populate the modal with the current item details
+                        $('#edit-item-name').val(item.name);
+                        $('#edit-item-quantity').val(item.quantity);
+
+                        // Set the data-id attribute of the form element to the item id
+                        $('#edit-item-form').attr('data-id', item.id);
+
+                        // Show the modal
+                        $('#edit-item-modal').modal('show');
                     },
                     error: (error) => {
                         console.error(`Failed to retrieve item. Please try again later. ${error}`);
@@ -204,10 +267,33 @@
                 });
             });
 
+            $('#edit-item-form').submit((event) => {
+                event.preventDefault();
+
+                const itemId = $('#edit-item-form').attr('data-id');
+                const formData = new FormData(event.target);
+
+                $.ajax({
+                    url: `/item/${itemId}`,
+                    method: 'PUT',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: () => {
+                        // Hide the modal
+                        $('#edit-item-modal').modal('hide');
+
+                        // Refresh the item list
+                        updateItemList();
+                    },
+                    error: (error) => {
+                        console.error(`Failed to update item. Please try again later. ${error}`);
+                    },
+                });
+            });
+
             $('#item-list').on('click', '.delete-btn', (event) => {
                 const itemId = event.currentTarget.getAttribute('data-id');
-
-                console.log(itemId);
 
                 $.ajax({
                     url: `/item/${itemId}`,
@@ -228,6 +314,30 @@
                 });
             });
 
+            // Add click handler for basket buttons
+            $('#item-list').on('click', '.basket-btn', (event) => {
+                const itemId = event.currentTarget.getAttribute('data-id');
+
+                $.ajax({
+                    url: `/item/${itemId}`,
+                    method: 'PUT',
+                    data: {
+                        isAddedToBasket: true,
+                    },
+                    success: () => {
+                        // Update the item in the shopping list
+                        const itemElement = document.querySelector(`[data-id="${itemId}"]`);
+
+                        const itemLi = event.currentTarget.closest('li');
+                        itemLi.style.borderLeft = '5px solid green';
+
+                        itemElement.classList.add('d-none');
+                    },
+                    error: (error) => {
+                        console.error(`Failed to update item: ${error}`);
+                    },
+                });
+            });
 
             $('.add-btn').on('click', () => {
                 const nameInput = $('#item-name');
@@ -250,9 +360,9 @@
                         updateItemList();
                         nameInput.val('');
                         quantityInput.val('');
+                        $('#item-image').siblings('.custom-file-label').html('Choose file');
                     },
                     error: (error) => {
-                        console.log(error);
                         console.error(`Failed to add item. Please try again later.`);
                     },
                 });
@@ -276,6 +386,14 @@
             }
         }
 
+        function formDataToObject(formData) {
+            let object = {};
+            formData.forEach((value, key) => {
+                object[key] = value;
+            });
+            return object;
+        }
+
         function updateItemList() {
             fetch('/items')
                 .then((response) => {
@@ -289,38 +407,61 @@
                     let itemListHTML = '';
                     items.forEach((item) => {
                         itemListHTML += `
-                            <li class="list-group-item d-flex justify-content-between align-items-center bg-white p-3 rounded-lg shadow-lg mb-3">
+                            <li class="list-group-item d-flex justify-content-between align-items-center bg-white p-3 rounded-lg mb-3" style="border-left: ${item.isAddedToBasket ? '5px solid green' : 'none'
+                            }">
                                 <div class="d-flex align-items-center">
-                                    <div class="mr-4" style="width: 64px; height: 64px;">
-                                        <img src="/images/${item.image}" style="object-fit: contain; width: 100%; height: 100%;" alt="Item Image">
-                                    </div>
-                                    <div>
-                                        <h4 class="text-primary font-weight-bold">
-                                            ${item.name}
-                                        </h4>
-                                        <p class="mb-0"><strong>Quantity: </strong>
-                                            ${item.quantity}
-                                        </p>
-                                    </div>
+                                <div class="mr-4" style="width: 64px; height: 64px;">
+                                    <img src="/images/${item.image}" style="object-fit: contain; width: 100%; height: 100%;" alt="Item Image">
                                 </div>
                                 <div>
-                                    <button class="btn btn-success mr-2 basket-btn"data-id="${item.id}"><i class="fas fa-shopping-basket"></i></button>
-                                    <button class="btn btn-secondary mr-2 edit-btn" data-id="${item.id}"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-danger delete-btn" data-id="${item.id}"><i class="fas fa-trash"></i></button>
+                                    <h4 class="text-primary font-weight-bold">${item.name}</h4>
+                                    <p class="mb-0"><strong>Quantity: </strong>${item.quantity}</p>
+                                </div>
+                                </div>
+                                <div>
+                                <button class="btn btn-success mr-2 basket-btn btn-md" style="display: ${item.isAddedToBasket ? 'none' : 'inline-block'
+                            }" data-id="${item.id}"><i class="fas fa-shopping-basket"></i></button>
+                                <button class="btn btn-secondary mr-2 edit-btn btn-md" data-id="${item.id}"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger delete-btn btn-md" data-id="${item.id}"><i class="fas fa-trash"></i></button>
                                 </div>
                             </li>
-                        `;
+                            `;
                     });
                     itemList.innerHTML = itemListHTML;
                     toggleButton();
 
+                    // Add click handler for basket buttons
+                    $('#item-list').on('click', '.basket-btn', (event) => {
+                        const itemId = event.currentTarget.getAttribute('data-id');
+                        $.ajax({
+                            url: `/item/${itemId}`,
+                            method: 'PUT',
+                            data: {
+                                isAddedToBasket: true,
+                            },
+                            success: () => {
+                                // Update the item in the shopping list
+                                const itemElement = event.target.closest('li');
+                                itemElement.style.borderLeft = '5px solid green';
+
+                                const h4Element = itemElement.querySelector('h4');
+                                if (h4Element) {
+                                    h4Element.style.textDecoration = 'line-through';
+                                }
+
+                                event.target.style.display = 'none';
+                            },
+                            error: (error) => {
+                                console.error(`Failed to update item: ${error}`);
+                            },
+                        });
+                    });
                 })
                 .catch((error) => {
-                    console.error(
-                        `Failed to retrieve items. Please try again later. ${error}`
-                    );
+                    console.error(`Failed to retrieve items. Please try again later. ${error}`);
                 });
         }
+
     </script>
 
 </body>
